@@ -11,7 +11,7 @@ function App() {
   const [cartIsVisible, setCartIsVisible] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState({
     isVisible: false,
-    msg: "",
+    msg: "l",
     success: false,
   });
 
