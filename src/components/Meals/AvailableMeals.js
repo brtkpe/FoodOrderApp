@@ -1,40 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MealItem from "./MealItem/MealItem";
 import Card from "../UI/Card";
-
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
-    price: 18.99,
-  },
-];
+import Spinner from "../UI/Spinner";
+import Error from "../UI/Error";
+import useHttp from "../../hooks/use-http";
 
 export default function AvailableMeals() {
   const [inputValue, setInputValue] = useState("");
-  // const [filteredMeals, setFilteredMeals] = useState(DUMMY_MEALS);
+  const [meals, setMeals] = useState([]);
 
-  const filteredMeals = DUMMY_MEALS.filter((meal) =>
-    meal.name.toLowerCase().includes(inputValue)
+  const transformMeals = (data) => {
+    const loadedMeals = [];
+
+    for (const mealKey in data) {
+      loadedMeals.push({
+        id: mealKey,
+        name: data[mealKey].name,
+        description: data[mealKey].description,
+        price: data[mealKey].price,
+      });
+    }
+
+    setMeals(loadedMeals);
+  };
+
+  const {
+    sendRequest: fetchMeals,
+    isLoading,
+    error,
+  } = useHttp(
+    "https://food-app-e35bb-default-rtdb.firebaseio.com/meals.json",
+    transformMeals
+  );
+
+  useEffect(() => {
+    fetchMeals();
+  }, [fetchMeals]);
+
+  const filteredMeals = meals.filter((meal) =>
+    inputValue === "" ? meal : meal.name.toLowerCase().includes(inputValue)
   );
 
   const inputChangeHandler = (e) => {
@@ -52,7 +56,9 @@ export default function AvailableMeals() {
         />
       </div>
       <Card>
-        {filteredMeals.length > 0 ? (
+        {error && <Error error={error} />}
+        {isLoading && !error && <Spinner />}
+        {!isLoading && !error && (
           <ul>
             {filteredMeals.map((meal) => {
               return (
@@ -66,10 +72,6 @@ export default function AvailableMeals() {
               );
             })}
           </ul>
-        ) : (
-          <p className="font-bold text-center text-xl text-slate-200">
-            No meal was found!
-          </p>
         )}
       </Card>
     </section>
