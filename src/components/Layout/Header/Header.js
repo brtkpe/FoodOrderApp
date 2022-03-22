@@ -10,7 +10,7 @@ const Header = (props) => {
     <>
       <header className="fixed top-0 left-0 w-full h-20 bg-gray-800/60 backdrop-blur-sm text-white shadow-sm flex justify-between items-center px-[10%] z-10">
         <HeaderTitle />
-        <HeaderCartButton/>
+        <HeaderCartButton onShowCart={props.onShowCart}/>
       </header>
       <div className="shadow-sm w-full h-[32rem] overflow-hidden z-0">
         <img

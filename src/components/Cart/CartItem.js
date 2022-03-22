@@ -14,13 +14,13 @@ const CartItem = (props) => {
       </div>
       <div className="flex gap-2">
         <button
-          className="font-bold text-2xl text-slate-200 border-[1px] border-red-900 w-12 rounded-lg"
+          className="btn btn-rounded text-2xl"
           onClick={props.onRemove}
         >
           -
         </button>
         <button
-          className="font-bold text-2xl text-slate-200 border-[1px] border-red-900 w-12 rounded-lg"
+          className="btn btn-rounded text-2xl"
           onClick={props.onAdd}
         >
           +

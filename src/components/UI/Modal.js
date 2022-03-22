@@ -1,12 +1,8 @@
 import ReactDOM from "react-dom";
-import { useContext } from "react";
-import ShowCartContext from "../../context/showCart-context";
 
-const Backdrop = (props) => {
-  const ctx = useContext(ShowCartContext)
-
+const Backdrop = () => {
   return (
-    <div onClick={ctx.onShowCart} className="fixed top-0 left-0 w-full h-screen bg-gray-500/70 z-20 backdrop-blur-sm"></div>
+    <div className="fixed top-0 left-0 w-full h-screen bg-gray-500/70 z-20 backdrop-blur-sm"></div>
   );
 };
 

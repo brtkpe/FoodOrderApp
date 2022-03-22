@@ -1,12 +1,12 @@
 import Modal from "../UI/Modal";
-import { useContext } from "react";
-import ShowCartContext from "../../context/showCart-context";
+import { useContext, useState } from "react";
+
 import CartContext from "../../context/cart-context";
 import CartItem from "./CartItem";
-import Snackbar from "../UI/Snackbar";
+import Checkout from "./Checkout";
 
 export default function Cart(props) {
-  const ctx = useContext(ShowCartContext);
+  const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
 
   function addItemHandler(item) {
@@ -28,15 +28,12 @@ export default function Cart(props) {
     </ul>
   );
 
-  function orderCartHandler() {
-    ctx.onShowCart();
-    props.onShowSnackbar(true, true, "Order accepted!");
-   cartCtx.removeItem('all')
+  function closeCartHandler() {
+    props.onShowCart();
   }
 
-  function closeCartHandler() {
-    ctx.onShowCart();
-    props.onShowSnackbar(true, false, "Order cancelled! ");
+  function orderHandler() {
+    setIsCheckout(true);
   }
 
   return (
@@ -47,24 +44,26 @@ export default function Cart(props) {
           <span>Total amount</span>
           <span>{cartCtx.totalAmount.toFixed(2)} $</span>
         </div>
-        <div className="flex justify-end text-slate-200 gap-4">
-          <button
-            onClick={closeCartHandler}
-            className="border-[1px] border-red-900 py-2 px-6  rounded-xl hover:bg-red-900"
-          >
-            Close
-          </button>
-          {cartCtx.items.length > 0 && (
+        {!isCheckout && (
+          <div className="flex justify-end text-slate-200 gap-4">
             <button
-              onClick={orderCartHandler}
-              className="border-[1px] border-transparent py-2 px-6 rounded-xl bg-red-800 hover:bg-red-900"
+              onClick={closeCartHandler}
+              className="btn btn-outline border-2 border-red-900 hover text-white hover:bg-red-900 hover:text-white hover:border-red-900"
             >
-              Order
+              Close
             </button>
-          )}
-        </div>
+            {cartCtx.items.length > 0 && (
+              <button
+                onClick={orderHandler}
+                className="btn bg-red-800 text-white hover:text-white hover:bg-red-900 "
+              >
+                Order
+              </button>
+            )}
+          </div>
+        )}
+        {isCheckout && <Checkout onClick={closeCartHandler} />}
       </Modal>
-      <Snackbar />
     </>
   );
 }
