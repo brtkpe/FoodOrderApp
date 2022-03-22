@@ -3,7 +3,7 @@ import React from "react";
 const CheckoutInput = React.forwardRef((props, ref) => {
   return (
     <>
-      <div className="flex w-1/2">
+      <div className="flex w-3/5">
         <label
           htmlFor={props.name}
           className={`font-bold w-1/3 rounded-l-md inline-flex  items-center px-3 border-t bg-slate-200 border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm
@@ -21,7 +21,7 @@ const CheckoutInput = React.forwardRef((props, ref) => {
           }`}
           name={props.name}
           placeholder={`${
-            props.isValid ? `Invalid ${props.label}` : `Invalid ${props.label}`
+            props.isValid ? `Your ${props.label}` : `Invalid ${props.label}`
           }`}
         />
       </div>

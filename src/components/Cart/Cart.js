@@ -1,5 +1,6 @@
 import Modal from "../UI/Modal";
 import { useContext, useState } from "react";
+import axios from "axios";
 
 import CartContext from "../../context/cart-context";
 import CartItem from "./CartItem";
@@ -7,6 +8,8 @@ import Checkout from "./Checkout";
 
 export default function Cart(props) {
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartCtx = useContext(CartContext);
 
   function addItemHandler(item) {
@@ -36,6 +39,19 @@ export default function Cart(props) {
     setIsCheckout(true);
   }
 
+  const submitHandler = async (userData) => {
+    setIsSubmitting(true);
+    try {
+      await axios.post(
+        "https://food-app-e35bb-default-rtdb.firebaseio.com/orders.json",
+        { user: userData, orderedItems: cartCtx.items }
+      );
+      setIsSubmitting(false);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <>
       <Modal>
@@ -62,7 +78,9 @@ export default function Cart(props) {
             )}
           </div>
         )}
-        {isCheckout && <Checkout onClick={closeCartHandler} />}
+        {isCheckout && (
+          <Checkout onClick={closeCartHandler} onConfirm={submitHandler} />
+        )}
       </Modal>
     </>
   );
