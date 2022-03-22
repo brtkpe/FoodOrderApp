@@ -5,6 +5,7 @@ const CartContext = React.createContext({
   totalAmount: 0,
   addItem: (item) => {},
   removeItem: (id) => {},
+  resetCartItems: () => {}
 });
 
 const defaultCartState = {
@@ -67,7 +68,15 @@ const cartReducer = (state, action) => {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
     };
+  } else if( action.type === "RESET") {
+    return {
+      items: [],
+      totalAmount: 0
+    }
+    
   }
+
+  return defaultCartState
 };
 
 export function CartProvider(props) {
@@ -85,7 +94,7 @@ export function CartProvider(props) {
 
   useEffect (() => {
     
-    items.length>0 && localStorage.setItem('cart', JSON.stringify(items))
+    localStorage.setItem('cart', JSON.stringify(items))
   }, [items])
 
 
@@ -97,11 +106,16 @@ export function CartProvider(props) {
     dispatchCart({ type: "REMOVE", id: id });
   }
 
+  function resetCartHandler() {
+    dispatchCart({type: "RESET"})
+  }
+
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemHandler,
     removeItem: removeItemHandler,
+    resetCartItems: resetCartHandler
   };
 
   return (

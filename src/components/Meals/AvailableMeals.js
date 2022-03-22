@@ -57,7 +57,7 @@ export default function AvailableMeals() {
       </div>
       <Card>
         {error && <Error error={error} />}
-        {isLoading && !error && <Spinner />}
+        {isLoading && !error && <div className="flex justify-center"><Spinner /></div>}
         {!isLoading && !error && (
           <ul>
             {filteredMeals.map((meal) => {
